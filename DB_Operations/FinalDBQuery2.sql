@@ -1,0 +1,6 @@
+SELECT TOP (1000) [Id]
+      ,[Name]
+      ,[FirstName]
+      ,[LastName]
+      ,[Place]
+  FROM [SuperHeroDB].[dbo].[SuperHeroes]
