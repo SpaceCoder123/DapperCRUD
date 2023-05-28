@@ -24,5 +24,16 @@ namespace DapperCRUD.Controllers
             return Ok(heroes);
         }
 
+        [HttpGet("id")]
+        public async Task<ActionResult<SuperHero>> GetSingleHero(int HeroId)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            var hero = await connection.QueryFirstAsync<SuperHero>($"select * from SuperHeroes where id = @Id", new {Id = HeroId});
+            return Ok(hero);
+        }
+        
+
+        
+
     }
 }
