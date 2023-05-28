@@ -29,14 +29,14 @@ namespace DapperCRUD.Controllers
         public async Task<ActionResult<SuperHero>> GetSingleHero(int HeroId)
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            var hero = await connection.QueryFirstAsync<SuperHero>($"select * from SuperHeroes where id = @Id", new {Id = HeroId});
+            var hero = await connection.QueryFirstAsync<SuperHero>($"select * from SuperHeroes where id = @Id", new { Id = HeroId });
             return Ok(hero);
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<SuperHero>>> AddSingleHero( SuperHero hero)
+        public async Task<ActionResult<List<SuperHero>>> AddSingleHero(SuperHero hero)
         {
-            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"    ));
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             await connection.ExecuteAsync("insert into SuperHeroes (Id, Name, FirstName, LastName, Place) values (@Id, @Name, @FirstName, @LastName, @Place)", hero);
             return Ok(await SelectAllSuperHeroes(connection));
         }
@@ -50,11 +50,16 @@ namespace DapperCRUD.Controllers
         public async Task<ActionResult<List<SuperHero>>> UpdateHero(SuperHero Hero)
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            await connection.ExecuteAsync("update SuperHeroes set Id = @Id, Name = @Name, FirstName = @FirstName, LastName = @LastName, Place = @Place where Id = @Id",Hero);
+            await connection.ExecuteAsync("update SuperHeroes set Id = @Id, Name = @Name, FirstName = @FirstName, LastName = @LastName, Place = @Place where Id = @Id", Hero);
             return Ok(await SelectAllSuperHeroes(connection));
         }
 
-        
-
+        [HttpDelete("id")]
+        public async Task<ActionResult<List<SuperHero>>> DeleteHero(int id)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            await connection.ExecuteAsync("delete from SuperHeroes where Id = @Id", new { Id = id });
+            return Ok(await SelectAllSuperHeroes(connection));
+        }
     }
 }
