@@ -1,0 +1,1 @@
+SELECT LEFT(ltrim(rtrim(@@ServerName)), Charindex('\', ltrim(rtrim(@@ServerName))) -1)
